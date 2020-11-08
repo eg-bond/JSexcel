@@ -8,13 +8,20 @@ function toCell() {
 }
 
 function toColumn(col) {
-    return `<div class="column">${col}</div>`
+    return `<div class="column">
+                ${col}
+                <div class="col-resize" data-resize="col"></div>
+            </div>`
 }
 
 function createRow(rowIndex, content) {
+    const resizer = rowIndex ? `<div class='row-resize' data-resize="row"></div>` : ''
     return `
         <div class="row">
-            <div class="row-info">${rowIndex ? rowIndex : ''}</div>
+            <div class="row-info">
+                ${rowIndex ? rowIndex : ''}                
+                ${resizer}
+            </div>
             <div class="row-data">${content}</div>
         </div>
     `
