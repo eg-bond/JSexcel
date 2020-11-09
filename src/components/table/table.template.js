@@ -3,13 +3,15 @@ const CODES = {
     Z: 90
 }
 
-function toCell() {
-    return `<div class="cell" contenteditable="true"></div>`
+function toCell(_, colNumber) {
+    return `<div class="cell" contenteditable="true" data-type=${"resizable"} data-col=${colNumber}></div>`
 }
 
-function toColumn(col) {
-    return `<div class="column">
-                ${col}
+// String.fromCharCode(colsCount).toString()
+
+function toColumn(colValue, colNumber) {
+    return `<div class="column" data-type=${"resizable"} data-col=${colNumber}>
+                ${colValue}
                 <div class="col-resize" data-resize="col"></div>
             </div>`
 }
