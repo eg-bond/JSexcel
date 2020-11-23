@@ -4,13 +4,13 @@ const CODES = {
 }
 
 function toCell(_, colNumber) {
-    return `<div class="cell" contenteditable="true" data-type=${"resizable"} data-col=${colNumber}></div>`
+    return `<div class="cell" contenteditable="true" data-type='resizable' data-col=${colNumber}></div>`
 }
 
 // String.fromCharCode(colsCount).toString()
 
 function toColumn(colValue, colNumber) {
-    return `<div class="column" data-type=${"resizable"} data-col=${colNumber}>
+    return `<div class="column" data-type='resizable' data-col=${colNumber}>
                 ${colValue}
                 <div class="col-resize" data-resize="col"></div>
             </div>`
@@ -19,7 +19,7 @@ function toColumn(colValue, colNumber) {
 function createRow(rowIndex, content) {
     const resizer = rowIndex ? `<div class='row-resize' data-resize="row"></div>` : ''
     return `
-        <div class="row">
+        <div class="row" data-type='resizable'>
             <div class="row-info">
                 ${rowIndex ? rowIndex : ''}                
                 ${resizer}
