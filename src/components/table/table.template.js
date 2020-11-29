@@ -3,11 +3,12 @@ const CODES = {
     Z: 90
 }
 
-function toCell(_, colNumber) {
-    return `<div class="cell" contenteditable="true" data-type='resizable' data-col=${colNumber}></div>`
+// function toCell(row, colNumber) {
+//     return `<div class="cell" contenteditable="true" data-col=${colNumber} data-row=${row}></div>`
+// }
+function toCell(row) {
+    return (_, colNumber) => `<div class="cell" contenteditable data-col=${colNumber} data-type="cell" data-id=${row}:${colNumber}></div>`
 }
-
-// String.fromCharCode(colsCount).toString()
 
 function toColumn(colValue, colNumber) {
     return `<div class="column" data-type='resizable' data-col=${colNumber}>
@@ -47,13 +48,14 @@ export function createTable(rowsCount = 15) {
     rows.push(createRow(null, cols))
 
     // Создаем остальные клетки
-    const cells = new Array(colsCount)
-        .fill('')
-        .map(toCell)
-        .join('')
 
-    for (let i=0; i < rowsCount; i++) {
-        rows.push(createRow(i + 1, cells))
+    for (let row = 0; row < rowsCount; row++) {
+        const cells = new Array(colsCount)
+            .fill('')
+            // .map((_, colNumber) => toCell(row, colNumber))
+            .map(toCell(row))
+            .join('')
+        rows.push(createRow(row + 1, cells))
     }
 
     return rows.join('')
