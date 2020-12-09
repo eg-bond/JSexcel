@@ -3,15 +3,26 @@ const CODES = {
     Z: 90
 }
 
-// function toCell(row, colNumber) {
-//     return `<div class="cell" contenteditable="true" data-col=${colNumber} data-row=${row}></div>`
-// }
-function toCell(row) {
-    return (_, colNumber) => `<div class="cell" contenteditable data-col=${colNumber} data-type="cell" data-id=${row}:${colNumber}></div>`
+const DEFAULT_WIDTH = 120
+
+function getWidth(state, index) {
+    return (state[index] || DEFAULT_WIDTH) + 'px'
 }
 
-function toColumn(colValue, colNumber) {
-    return `<div class="column" data-type='resizable' data-col=${colNumber}>
+function toCell(state, row) {
+    return (_, colNumber) => `
+        <div 
+        class="cell" 
+        contenteditable 
+        data-col=${colNumber} 
+        data-type="cell" 
+        data-id=${row}:${colNumber} 
+        style="width: ${getWidth(state.colState, colNumber)}"
+        ></div>`
+}
+
+function toColumn({colValue, index, width}) {
+    return `<div class="column" data-type='resizable' data-col=${index} style="width: ${width}">
                 ${colValue}
                 <div class="col-resize" data-resize="col"></div>
             </div>`
@@ -34,7 +45,15 @@ function toChar(_, index) { // подстрочником обозначаетс
     return String.fromCharCode(CODES.A + index)
 }
 
-export function createTable(rowsCount = 15) {
+function withWidthFrom(state) {
+    return function(colValue, index) {
+        return {
+            colValue, index, width: getWidth(state.colState, index)
+        }
+    }
+}
+
+export function createTable(rowsCount = 15, state) {
     const colsCount = CODES.Z - CODES.A + 1
     const rows = []
 
@@ -42,6 +61,7 @@ export function createTable(rowsCount = 15) {
     const cols = new Array(colsCount)
         .fill('')
         .map(toChar)
+        .map(withWidthFrom(state))
         .map(toColumn) // el => createCol(el)
         .join('')
 
@@ -52,8 +72,7 @@ export function createTable(rowsCount = 15) {
     for (let row = 0; row < rowsCount; row++) {
         const cells = new Array(colsCount)
             .fill('')
-            // .map((_, colNumber) => toCell(row, colNumber))
-            .map(toCell(row))
+            .map(toCell(state, row))
             .join('')
         rows.push(createRow(row + 1, cells))
     }

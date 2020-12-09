@@ -18,7 +18,7 @@ export class Table extends ExcelComponent {
     }
 
     toHTML() {
-        return createTable(25)
+        return createTable(25, this.store.getState())
     }
 
     prepare() { // вызывается перед init
@@ -39,10 +39,6 @@ export class Table extends ExcelComponent {
         this.$on('formula:done', () => {
             this.selection.currentCell.focus()
         })
-
-        // this.$subscribe(state => {
-        //     console.log('TableState', state)
-        // })
     }
 
     selectCell($cell) {
