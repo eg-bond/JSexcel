@@ -15,16 +15,20 @@ function getHeight(rowState, index) {
 }
 
 function toCell(state, row) {
-    return (_, colNumber) => ` 
+    return (_, colNumber) => {
+        const id = `${row}:${colNumber}`
+        const cellText = state.dataState[id]
+        return ` 
         <div 
         class="cell" 
         contenteditable 
         data-col=${colNumber} 
         data-row=${row}
         data-type="cell" 
-        data-id=${row}:${colNumber} 
+        data-id=${id} 
         style="width: ${getWidth(state.colState, colNumber)}"
-        ></div>`
+        >${cellText || ''}</div>`
+    }
 }
 
 function toColumn({colValue, index, width}) {

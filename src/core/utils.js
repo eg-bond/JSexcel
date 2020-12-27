@@ -24,3 +24,10 @@ export function storage(key, data) {
     }
     localStorage.setItem(key, JSON.stringify(data))
 }
+// Хелпер для стора
+export function isEqual(a, b) {
+    if (typeof a === 'object' && typeof b === 'object') {
+        return JSON.stringify(a) === JSON.stringify(b)
+    }
+    return a === b
+}

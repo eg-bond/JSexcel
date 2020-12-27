@@ -38,6 +38,7 @@ export class Table extends ExcelComponent {
 
         this.$on('formula:input', text => {
             this.selection.currentCell.text(text)
+            this.updateTextInStore(text)
         })
         this.$on('formula:done', () => {
             this.selection.currentCell.focus()
@@ -87,9 +88,17 @@ export class Table extends ExcelComponent {
         }
     }
 
+    updateTextInStore(text) {
+        this.$dispatch(actions.changeText({
+            id: this.selection.currentCell.id(),
+            text
+        }))
+    }
+
     // Дублируем набираемый в ячейке текст в строку формулы
     onInput(event) {
-        this.$emit('table:input', $(event.target))
+        // this.$emit('table:input', $(event.target))
+        this.updateTextInStore($(event.target).text())
     }
 }
 

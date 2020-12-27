@@ -1,5 +1,6 @@
 import {$} from '@core/dom';
 import {Emitter} from '@core/Emitter';
+import {StoreSubscriber} from '@core/StoreSubscriber';
 
 export class Excel {
     constructor(selector, options) {
@@ -7,6 +8,7 @@ export class Excel {
         this.components = options.components || []
         this.store = options.store
         this.emitter = new Emitter()
+        this.subscriber = new StoreSubscriber(this.store)
     }
 
     // Создаем страницу Excel (Создаем корневой div страницы, инициализируем все подкомпоненты и привязываем их к созданным для них div-ам)
@@ -32,11 +34,13 @@ export class Excel {
     // метод, отвечающий за рендеринг страницы Excel
     render() {
         this.$el.append(this.getRoot())
+        this.subscriber.subscribeComponents(this.components)
         // инициализируем подкомпоненты
         this.components.forEach(component => component.init())
     }
 
     destroy() {
+        this.subscriber.unsubscribeFromStore()
         this.components.forEach(component => component.destroy())
     }
 }

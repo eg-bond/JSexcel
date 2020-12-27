@@ -16,7 +16,8 @@ export function createStore(rootReducer, initialState = {}) {
             listeners.forEach(listener => listener(state))
         },
         getState() {
-            return state
+            // лайфхак для того, чтобы избежать мутирования стейта
+            return JSON.parse(JSON.stringify(state))
         }
     }
 }

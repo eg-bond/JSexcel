@@ -8,6 +8,8 @@ export class Formula extends ExcelComponent {
         super($root, {
             name: 'Formula',
             listeners: ['input', 'keydown'],
+            // тут указаны конкретные поля стейта, за изменениями которых необходимо наблюдать
+            subscribe: ['currentText'],
             ...options
         })
     }
@@ -28,14 +30,22 @@ export class Formula extends ExcelComponent {
             this.$formula.text($cell.text())
         })
 
-        this.$on('table:input', $cell => {
-            this.$formula.text($cell.text())
-        })
+        // this.$on('table:input', $cell => {
+        //     this.$formula.text($cell.text())
+        // })
 
         // this.$subscribe(state => {
-        //     console.log('FormulaState', state)
+        //     console.log('FormulaUpdate', state.currentText)
+        //     this.$formula.text(state.currentText)
         // })
     }
+
+    storeChanged({currentText}) { // откуда currentText?
+        this.$formula.text(currentText)
+    }
+    // storeChanged(changes) {
+    //     console.log(changes)
+    // }
 
     onInput(event) {
         this.$emit('formula:input', $(event.target).text())
