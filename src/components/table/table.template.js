@@ -4,17 +4,23 @@ const CODES = {
 }
 
 const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 24
 
-function getWidth(state, index) {
-    return (state[index] || DEFAULT_WIDTH) + 'px'
+function getWidth(colState, index) {
+    return (colState[index] || DEFAULT_WIDTH) + 'px'
+}
+
+function getHeight(rowState, index) {
+    return (rowState[index] || DEFAULT_HEIGHT) + 'px'
 }
 
 function toCell(state, row) {
-    return (_, colNumber) => `
+    return (_, colNumber) => ` 
         <div 
         class="cell" 
         contenteditable 
         data-col=${colNumber} 
+        data-row=${row}
         data-type="cell" 
         data-id=${row}:${colNumber} 
         style="width: ${getWidth(state.colState, colNumber)}"
@@ -22,16 +28,17 @@ function toCell(state, row) {
 }
 
 function toColumn({colValue, index, width}) {
-    return `<div class="column" data-type='resizable' data-col=${index} style="width: ${width}">
+    return `<div class="column" data-type="resizable" data-col="${index}" style="width: ${width}">
                 ${colValue}
                 <div class="col-resize" data-resize="col"></div>
             </div>`
 }
 
-function createRow(rowIndex, content) {
+function createRow(rowIndex, content, rowState) {
     const resizer = rowIndex ? `<div class='row-resize' data-resize="row"></div>` : ''
+    const height = getHeight(rowState, rowIndex)
     return `
-        <div class="row" data-type='resizable'>
+        <div class="row" data-type='resizable' data-row=${rowIndex} style="height: ${height}">
             <div class="row-info">
                 ${rowIndex ? rowIndex : ''}                
                 ${resizer}
@@ -53,7 +60,7 @@ function withWidthFrom(state) {
     }
 }
 
-export function createTable(rowsCount = 15, state) {
+export function createTable(rowsCount = 15, state = {}) {
     const colsCount = CODES.Z - CODES.A + 1
     const rows = []
 
@@ -65,7 +72,7 @@ export function createTable(rowsCount = 15, state) {
         .map(toColumn) // el => createCol(el)
         .join('')
 
-    rows.push(createRow(null, cols))
+    rows.push(createRow(null, cols, {}))
 
     // Создаем остальные клетки
 
@@ -74,7 +81,7 @@ export function createTable(rowsCount = 15, state) {
             .fill('')
             .map(toCell(state, row))
             .join('')
-        rows.push(createRow(row + 1, cells))
+        rows.push(createRow(row + 1, cells, state.rowState))
     }
 
     return rows.join('')

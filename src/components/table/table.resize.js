@@ -3,14 +3,13 @@ import {$} from '@core/dom';
 export function resizeHandler($root, event) {
     return new Promise(resolve => {
         const $resizer = $(event.target)
-        // const $parent = $resizer.$el.parentNode // bad
-        // const $parent = $resizer.$el.closest('column') // better
         const $parent = $resizer.closest('[data-type="resizable"]') // best
         const coords = $parent.getCoords()
         const type = $resizer.data.resize
         const sideProp = type === 'col' ? 'bottom' : 'right'
         let value
 
+        // sideProp делает полоску ресайзера длинной, оходящей за пределы экрана
         $resizer.css({
             opacity: 1,
             [sideProp]: '-2000px'
@@ -39,10 +38,10 @@ export function resizeHandler($root, event) {
             } else {
                 $parent.css({height: value + 'px'})
             }
-
             resolve({
                 value,
-                id: type === 'col' ? $parent.data.col : null
+                type,
+                id: $parent.data[type]
              })
 
             $resizer.css({

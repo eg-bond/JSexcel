@@ -17,6 +17,7 @@ export function range(start, end) {
         .map((_, index) => start + index)
 }
 
+// Вытаскиваем данные из Локального хранилища либо засовывает их туда, если передан data
 export function storage(key, data) {
     if (!data) {
         return JSON.parse(localStorage.getItem(key))

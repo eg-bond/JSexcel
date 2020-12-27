@@ -1,6 +1,6 @@
 export function createStore(rootReducer, initialState = {}) {
     let state = rootReducer({...initialState}, {type: '__INIT__'})
-    let listeners = []
+    let listeners = [] // массив функций, вызываемых при изменении стейта
 
     return {
         subscribe(fn) {

@@ -4,7 +4,7 @@ import {createTable} from '@/components/table/table.template';
 import {resizeHandler} from '@/components/table/table.resize';
 import {isCell, matrix, nextSelector, shouldResize} from '@/components/table/table.functions';
 import {TableSelection} from '@/components/table/TableSelection';
-import * as actions from '@/redux/actions'
+import {actions} from '@/redux/rootReducer';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table'
@@ -21,17 +21,20 @@ export class Table extends ExcelComponent {
         return createTable(25, this.store.getState())
     }
 
-    prepare() { // вызывается перед init
+    // вызывается перед init (в конструкторе ExcelComponent)
+    prepare() {
         this.selection = new TableSelection()
+    }
+
+    selectCell($cell) {
+        this.selection.select($cell)
+        this.$emit('table:select', $cell)
     }
 
     init() {
         super.init()
 
         this.selectCell(this.$root.find('[data-id="0:0"]'))
-        // this.selection.select($cell)
-        // // этот эмит для того, чтобы при первоначальной загрузке страницы контент ячейки сразу оказывался в формуле
-        // this.$emit('table:select', $cell)
 
         this.$on('formula:input', text => {
             this.selection.currentCell.text(text)
@@ -41,14 +44,10 @@ export class Table extends ExcelComponent {
         })
     }
 
-    selectCell($cell) {
-        this.selection.select($cell)
-        this.$emit('table:select', $cell)
-    }
-
     async resizeTable(event) {
         try {
             const data = await resizeHandler(this.$root, event)
+
             this.$dispatch(actions.tableResize(data))
             console.log('Resize data', data)
         } catch (e) {
@@ -71,6 +70,7 @@ export class Table extends ExcelComponent {
         }
     }
 
+    // перемещение по ячейкам с помощью кнопок на клавиатуре
     onKeydown(event) {
         const keys = ['Enter', 'Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown']
 
@@ -87,6 +87,7 @@ export class Table extends ExcelComponent {
         }
     }
 
+    // Дублируем набираемый в ячейке текст в строку формулы
     onInput(event) {
         this.$emit('table:input', $(event.target))
     }

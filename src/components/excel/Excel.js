@@ -9,6 +9,7 @@ export class Excel {
         this.emitter = new Emitter()
     }
 
+    // Создаем страницу Excel (Создаем корневой div страницы, инициализируем все подкомпоненты и привязываем их к созданным для них div-ам)
     getRoot() {
         const $root = $.create('div', 'excel')
 
@@ -19,8 +20,8 @@ export class Excel {
 
         this.components = this.components.map(Component => {
             const $el = $.create('div', Component.className)
-            const component = new Component($el, componentOptions) // вызываем инстанс классового компонента, лежащего в массиве
-
+            // вызываем инстанс классового компонента, лежащего в массиве
+            const component = new Component($el, componentOptions)
             $el.html(component.toHTML())
             $root.append($el)
             return component
@@ -28,10 +29,10 @@ export class Excel {
 
         return $root
     }
-
+    // метод, отвечающий за рендеринг страницы Excel
     render() {
         this.$el.append(this.getRoot())
-
+        // инициализируем подкомпоненты
         this.components.forEach(component => component.init())
     }
 
