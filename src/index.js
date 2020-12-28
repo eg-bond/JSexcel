@@ -13,7 +13,8 @@ const store = createStore(rootReducer, initialState)
 // const store = createStore(rootReducer, {colState: {}})
 
 // Функция storage запихивает данные из state в localStorage под ключем 'excel-state'
-store.subscribe(state => {
+
+store.subscribe(state => { // state - это обновленный стейт, откуда он?
     storage('excel-state', state)
 })
 

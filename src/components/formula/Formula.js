@@ -40,12 +40,10 @@ export class Formula extends ExcelComponent {
         // })
     }
 
-    storeChanged({currentText}) { // откуда currentText?
+    // storeChanged вызывается в обертке StoreSubscriber при изменении необходимой части стейта
+    storeChanged({currentText}) { // currentText приходит из
         this.$formula.text(currentText)
     }
-    // storeChanged(changes) {
-    //     console.log(changes)
-    // }
 
     onInput(event) {
         this.$emit('formula:input', $(event.target).text())

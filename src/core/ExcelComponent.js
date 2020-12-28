@@ -6,12 +6,11 @@ export class ExcelComponent extends DomListener {
         this.name = options.name || ''
         this.emitter = options.emitter
         this.unsubscribers = []
+        // массив с полями стейта, за изменениями в которых необходимо наблюдать
         this.subscribe = options.subscribe || []
         this.store = options.store
-        // this.storeSub = null
 
         this.prepare()
-        // this.storeChanged(this.store)
     }
 
     // Настраиваем наш компонент до init
@@ -37,9 +36,11 @@ export class ExcelComponent extends DomListener {
         this.store.dispatch(action)
     }
 
-    // Сюда приходят только изменения по тем полям, на котрые мы подписались
+    // Сюда приходят только изменения по тем полям, на изменения которых мы подписались ..
+    // .. в конкретной подкомпоненте (в массиве this.subscribe)
     storeChanged() {}
 
+    // Проверяем, отслеживается ли необходимая часть стейта
     isWatching(key) {
         return this.subscribe.includes(key)
     }

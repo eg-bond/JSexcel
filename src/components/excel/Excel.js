@@ -34,7 +34,7 @@ export class Excel {
     // метод, отвечающий за рендеринг страницы Excel
     render() {
         this.$el.append(this.getRoot())
-        this.subscriber.subscribeComponents(this.components)
+        this.subscriber.subscribeComponents(this.components) // подписываемся на изменение стейта
         // инициализируем подкомпоненты
         this.components.forEach(component => component.init())
     }
