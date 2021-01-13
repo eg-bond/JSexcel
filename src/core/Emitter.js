@@ -4,8 +4,7 @@ export class Emitter {
     }
 
     // dispatch, fire, trigger
-    // Уведомляем слушателей если они есть
-    // table.emit('table:select', {a: 1})
+    // Уведомляем слушателей если они есть о срабатывании события event
     emit(event, ...args) {
         if (!Array.isArray(this.listeners[event])) {
             return false
@@ -17,9 +16,8 @@ export class Emitter {
     }
 
     // on, listen
-    // Подписываемся на уведомление
-    // Добавляем нового слушателя
-    // formula.subscribe('table:select', () => {})
+    // Подписываемся на уведомление при срабатывании события event (emit())
+    // Добавляем нового слушателя (функцию, вызываемую при срабатывании event)
     subscribe(event, fn) {
         this.listeners[event] = this.listeners[event] || []
         this.listeners[event].push(fn)
