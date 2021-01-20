@@ -3,8 +3,7 @@ import {Emitter} from '@core/Emitter';
 import {StoreSubscriber} from '@core/StoreSubscriber';
 
 export class Excel {
-    constructor(selector, options) {
-        this.$el = $(selector)
+    constructor(options) {
         this.components = options.components || []
         this.store = options.store
         this.emitter = new Emitter()
@@ -31,9 +30,9 @@ export class Excel {
 
         return $root
     }
-    // метод, отвечающий за рендеринг страницы Excel
-    render() {
-        this.$el.append(this.getRoot())
+
+    // метод, отвечающий за инициализацию страницы Excel
+    init() {
         this.subscriber.subscribeComponents(this.components) // подписываемся на изменение стейта
         // инициализируем подкомпоненты
         this.components.forEach(component => component.init())
