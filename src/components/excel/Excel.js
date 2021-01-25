@@ -1,6 +1,7 @@
 import {$} from '@core/dom';
 import {Emitter} from '@core/Emitter';
 import {StoreSubscriber} from '@core/StoreSubscriber';
+import {actions} from '@/redux/rootReducer';
 
 export class Excel {
     constructor(options) {
@@ -33,6 +34,8 @@ export class Excel {
 
     // метод, отвечающий за инициализацию страницы Excel
     init() {
+        // console.log(process.env.NODE_ENV)
+        this.store.dispatch(actions.updateDate())
         this.subscriber.subscribeComponents(this.components) // подписываемся на изменение стейта
         // инициализируем подкомпоненты
         this.components.forEach(component => component.init())

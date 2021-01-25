@@ -1,21 +1,21 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 
-// Класс, который имитирует Реактовский хук setState
+// Класс, который имитирует Реактовский хук setState, создает локальный стейт  для компоненты
 export class ExcelStateComponent extends ExcelComponent {
     constructor(...args) {
         super(...args);
     }
     // Получаем HTML верстку, обновленную с учетом изменившегося стейта
     get template() {
-        return JSON.stringify(this.state, null, 2)
+        return JSON.stringify(this.localState, null, 2)
     }
-    // Инициализируем начальный стейт
+    // создаем локальный стейт компоненты в переменной this.state
     initState(initialState = {}) {
-        this.state = {...initialState}
+        this.localState = {...initialState}
     }
-    // Обновляем стейт
+    // Обновляем локальный стейт и перерисовываем компоненту
     setState(newState) {
-        this.state = {...this.state, ...newState}
+        this.localState = {...this.localState, ...newState}
         this.$root.html(this.template)
     }
 }

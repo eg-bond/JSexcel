@@ -20,16 +20,15 @@ export class Toolbar extends ExcelStateComponent {
     }
 
     get template() {
-        return createToolbar(this.state)
+        return createToolbar(this.localState)
     }
 
-    toHTML() {
+    toHTML() { // вызывается в момент инициализации компоненты, в Excel.js
         return this.template
     }
 
-    storeChanged(changes) {
-        // вместо трех строчек ниже
-        this.setState(changes.currentStyles)
+    storeChanged({currentStyles}) {
+        this.setState(currentStyles)
     }
 
     onClick(event) {
@@ -37,9 +36,6 @@ export class Toolbar extends ExcelStateComponent {
         if ($target.data.type === 'button') {
             const value = JSON.parse($target.data.value)
             this.$emit('toolbar:applyStyle', value)
-            // const key = Object.keys(value)[0]
-            // this.setState({[key]: value[key]})
-            // console.log(this.state)
         }
     }
 }
